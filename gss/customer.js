@@ -24,4 +24,5 @@ module.exports.create = async (event) => {
         return sendResponse(200, { message: 'Customer created successfully' });
     } catch (error) {
         return sendResponse(500, { message: "Could not create Customer" });
-    };
+    }
+}
