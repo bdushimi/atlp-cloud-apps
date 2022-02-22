@@ -40,11 +40,29 @@ module.exports.get = async (event) => {
             ':id': 'RESPONSE#' + id
         }
     }
-
     const data = await dynamodb.query(params).promise();
     if (data.Count > 0) {
         return sendResponse(200, { message: 'Response has been retrieved successfully', data: data.Items[0] });
     } else {
         return sendResponse(404, { message: 'Response not found' });
+    }
+}
+
+module.exports.getAll = async (event) => {
+    const TableName = process.env.DYNAMODB_TABLE;
+    const survey_id = event.pathParameters.id;
+    const params = {
+        TableName,
+        KeyConditionExpression: 'sk = :id and pk begins_with :response_prefix',
+        ExpressionAttributeValues: {
+            ':id': 'SURVEY#' + survey_id,
+            ':response_prefix': 'RESPONSE#'
+        }
+    }
+    const data = await dynamodb.query(params).promise();
+    if (data.Count > 0) {
+        return sendResponse(200, { message: 'All responses have been retrieved successfully', data: data.Items });
+    } else {
+        return sendResponse(404, { message: 'No responses found' });
     }
 }
