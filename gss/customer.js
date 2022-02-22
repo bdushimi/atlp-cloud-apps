@@ -1,6 +1,6 @@
 "use strict";
 
-const dynamodb = require('./config/dynamoDb');
+const dynamodb = require('./config/dynamoDb').default;
 const { sendResponse } = require('./utils/response');
 
 
@@ -27,8 +27,8 @@ module.exports.create = async (event) => {
     }
 }
 
-module.export.get = async (event) => {
-    const customer_id = event.pathParameters.customer_id;
+module.exports.get = async (event) => {
+    const customer_id = event.pathParameters.id;
     try {
         const TableName = process.env.DYNAMODB_TABLE;
         const params = {
