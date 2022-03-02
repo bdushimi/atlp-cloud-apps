@@ -1,6 +1,6 @@
 "use strict";
 
-const dynamodb = require('./config/dynamoDb').default;
+const dynamodb = require('./gss/config/dynamoDb').default;
 const { sendResponse } = require('./utils/response');
 
 
@@ -13,8 +13,9 @@ module.exports.create = async (event) => {
         const params = {
             TableName,
             Item: {
-                customer_id,
-                profile_data
+                'pk': 'CUSTOMER#' + customer_id,
+                'sk': 'PROFILE#' + customer_id,
+                'profile_data': profile_data
             },
             // insert the data if the partition key is not found
             ConditionExpression: "attribute_not_exists(customer_id)"
@@ -34,7 +35,8 @@ module.exports.get = async (event) => {
         const params = {
             TableName,
             Key: {
-                customer_id
+                'pk': 'CUSTOMER#' + customer_id,
+                'sk': 'CUSTOMER#' + customer_id
             }
         };
 
