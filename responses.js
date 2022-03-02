@@ -10,7 +10,7 @@ module.exports.create = async (event) => {
     try { 
         const TableName = process.env.DYNAMODB_TABLE;
         const { response_data, survey_id } = body
-        const response_id = uuid4();
+        const response_id = uuid();
         const params = {
             TableName,
             Item: {
@@ -41,10 +41,10 @@ module.exports.get = async (event) => {
         }
     }
     const data = await dynamodb.query(params).promise();
-    if (data.Count > 0) {
-        return sendResponse(200, { message: 'Response has been retrieved successfully', data: data.Items[0] });
+    if (data.Item) {
+        return sendResponse(200, { message: 'Response has been retrieved successfully', data: data.Item });
     } else {
-        return sendResponse(404, { message: 'Response not found' });
+        return sendResponse(404, { message: 'No response found' });
     }
 }
 

@@ -41,7 +41,12 @@ module.exports.get = async (event) => {
         };
 
         const data = await dynamodb.get(params).promise();
-        return sendResponse(200, { message : 'Customer retrieved successfully', data });
+        
+        if (data.Item) {
+            return sendResponse(200, { message: 'Customer retrieved successfully', data: data.Item });
+        } else {
+            return sendResponse(404, { message: 'Customer not found' });
+        }
     } catch (error) {
         return sendResponse(500, { message: "Could not get Customer" });
     }
