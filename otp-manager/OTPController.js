@@ -1,20 +1,11 @@
 'use strict';
 
 module.exports.generate = async (event) => {
+
+  const { phoneNumber } = JSON.parse(event.body);;
+
   return {
     statusCode: 200,
-    body: JSON.stringify(
-      {
-        message: 'Go Serverless v1.0! Your function executed successfully!',
-        input: event,
-      },
-      null,
-      2
-    ),
+    phoneNumber
   };
 };
-
-
-module.exports.verify = async (event) => { 
-
-}

@@ -8,11 +8,12 @@ provider:
   region: 'us-east-1'
 
 
-  function:
-    generateOtp: 
+functions:
+  generateOtp: 
       handler: OTPController.generate
       description: Generate OTP & send to give number.
-      event: 
+      events: 
         - http: 
             path: /generate
             method: POST
+    
