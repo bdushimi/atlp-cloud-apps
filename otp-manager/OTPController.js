@@ -1,16 +1,15 @@
 'use strict';
-import { sendResponse } from './utils/sendResponse.js';
+// import { sendResponse } from './utils/sendResponse.mjs';
+const axios = require("axios").default;
 
-export async function generate(event) {
-
-  const { expiry, message, mobile, sender_id } = JSON.parse(event.body);
-
+exports.generate = async (event) => {
+  const { expiry, message, mobile, sender_id } = (event.body);
   const options = {
     method: 'POST',
     url: 'https://d7-verify.p.rapidapi.com/send',
     headers: {
       'content-type': 'application/json',
-      authorization: 'undefined',
+      authorization: 'Token 4c7a47a81381a795f012fd075a0b1efff7ed049e',
       'x-rapidapi-host': 'd7-verify.p.rapidapi.com',
       'x-rapidapi-key': '0894320c95msh9b0466dd3573520p171759jsn82db79091d5c'
     },
@@ -23,20 +22,16 @@ export async function generate(event) {
   };
 
   axios.request(options).then(function (response) {
-    return sendResponse(
-      200,
-      {
-        message: 'OTP generated successfully',
-        data: response.data
-      }
-    );
+
+    return {
+      'statusCode': 200,
+      'body': response.data
+    }
   }).catch(function (error) {
-    return sendResponse(
-      500,
-      {
-        message: 'Could not generate OTP',
-        error
-      }
-    );
+
+    return {
+      'statusCode': 500,
+      'body': error
+    }
   });
 }

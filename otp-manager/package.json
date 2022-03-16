@@ -1,7 +1,7 @@
 {
-  "name": "otp-manager-service",
+  "name": "otp-manager",
   "version": "1.0.0",
-  "description": "This is a simple project that purposes to generate and verify an OTP",
+  "description": "",
   "main": "OTPController.js",
   "type": "module",
   "scripts": {
