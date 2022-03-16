@@ -3,7 +3,9 @@
 const axios = require("axios").default;
 
 exports.generate = async (event) => {
-  const { expiry, message, mobile, sender_id } = (event.body);
+
+  const { expiry, message, mobile, sender_id } = JSON.parse(event.body);
+
   const options = {
     method: 'POST',
     url: 'https://d7-verify.p.rapidapi.com/send',
@@ -21,17 +23,31 @@ exports.generate = async (event) => {
     }
   };
 
-  axios.request(options).then(function (response) {
-
-    return {
-      'statusCode': 200,
-      'body': response.data
+  return {
+    'statusCode': 200,
+    'body': {
+      expiry,
+      message,
+      mobile,
+      sender_id
     }
-  }).catch(function (error) {
+  }
 
-    return {
-      'statusCode': 500,
-      'body': error
-    }
-  });
+  // axios.request(options).then(function (response) {
+
+  //   console.log("response",response)
+
+  //   return {
+  //     'statusCode': 200,
+  //     'body': response.data
+  //   }
+  // }).catch(function (error) {
+
+  // console.log("error",error)
+
+  //   return {
+  //     'statusCode': 500,
+  //     'error': error
+  //   }
+  // });
 }
