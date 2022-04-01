@@ -25,6 +25,19 @@ Resources:
           Properties:
             Path: /hello
             Method: get
+            
+  QuotesScraperFunction:
+    Type: AWS::Serverless::Function # More info about Function Resource:
+    Properties:
+      CodeUri: quotes-scraper/
+      Handler: app.lambdaHandler
+      Runtime: nodejs14.x
+      Events:
+        QuotesScraper:
+          Type: Api # More info about API Event Source:
+          Properties:
+            Path: /quotes
+            Method: get          
 
 Outputs:
   # ServerlessRestApi is an implicit API created out of Events key under Serverless::Function
@@ -39,3 +52,13 @@ Outputs:
   HelloWorldFunctionIamRole:
     Description: "Implicit IAM Role created for Hello World function"
     Value: !GetAtt HelloWorldFunctionRole.Arn
+
+  QuotesScraperApi:
+    Description: "API Gateway endpoint URL for Prod stage for Quotes Scraper function"
+    Value: !Sub "https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/quotes/"
+  QuotesScraperFunction:
+    Description: "Quotes Scraper Function ARN"
+    Value: !GetAtt QuotesScraperFunction.Arn
+  QuotesScraperFunctionIamRole:
+    Description: "Implicit IAM Role created for Quotes Scraper function"
+    Value: !GetAtt QuotesScraperFunctionRole.Arn  
