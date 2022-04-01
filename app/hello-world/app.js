@@ -22,7 +22,8 @@ let response;
  * In this case, it will contain information about the HTTP request.
  * 
  * @param {*} context 
- * contains useful information about the runtime environment, such as the allowed execution time or logging setup.
+ * contains useful information about the runtime environment, 
+ * such as the allowed execution time or logging setup.
  * 
  * @returns 
  */
