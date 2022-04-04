@@ -46,7 +46,7 @@ Resources:
   CreateBookFunction:
     Type: AWS::Serverless::Function
     Properties:
-      CodeUri: s3://demo-project-deployment/ce4d55a007aa6fd281d3ce4ef5ba88d4
+      CodeUri: s3://demo-project-deployment/d0d244a83f6ca1f229aad47311042e7a
       Handler: app.create
       Runtime: nodejs14.x
       Policies:
@@ -64,7 +64,7 @@ Resources:
   GetAllBooksFunction:
     Type: AWS::Serverless::Function
     Properties:
-      CodeUri: s3://demo-project-deployment/ce4d55a007aa6fd281d3ce4ef5ba88d4
+      CodeUri: s3://demo-project-deployment/d0d244a83f6ca1f229aad47311042e7a
       Handler: app.getAll
       Runtime: nodejs14.x
       Policies:
@@ -82,7 +82,7 @@ Resources:
   GetBookFunction:
     Type: AWS::Serverless::Function
     Properties:
-      CodeUri: s3://demo-project-deployment/ce4d55a007aa6fd281d3ce4ef5ba88d4
+      CodeUri: s3://demo-project-deployment/d0d244a83f6ca1f229aad47311042e7a
       Handler: app.get
       Runtime: nodejs14.x
       Policies:
@@ -100,7 +100,7 @@ Resources:
   UpdateBookFunction:
     Type: AWS::Serverless::Function
     Properties:
-      CodeUri: s3://demo-project-deployment/ce4d55a007aa6fd281d3ce4ef5ba88d4
+      CodeUri: s3://demo-project-deployment/d0d244a83f6ca1f229aad47311042e7a
       Handler: app.update
       Runtime: nodejs14.x
       Policies:
@@ -118,7 +118,7 @@ Resources:
   DeleteBookFunction:
     Type: AWS::Serverless::Function
     Properties:
-      CodeUri: s3://demo-project-deployment/ce4d55a007aa6fd281d3ce4ef5ba88d4
+      CodeUri: s3://demo-project-deployment/d0d244a83f6ca1f229aad47311042e7a
       Handler: app.delete
       Runtime: nodejs14.x
       Policies:
