@@ -9,6 +9,9 @@ Description: >
 Globals:
   Function:
     Timeout: 3
+    Environment:
+      Variables:
+        TABLE_NAME: 'books-table'
 
 Resources:
   HelloWorldFunction:
@@ -38,7 +41,76 @@ Resources:
           Type: Api # More info about API Event Source:
           Properties:
             Path: /quotes
-            Method: get          
+            Method: get         
+
+  CreateBookFunction:
+    Type: AWS::Serverless::Function # More info about Function Resource:
+    Properties:
+      CodeUri: book-service/
+      Handler: app.create
+      Runtime: nodejs14.x
+      Events:
+        CreateBook:
+          Type: Api # More info about API Event Source:
+          Properties:
+            Path: /book
+            Method: POST
+
+  GetAllBooksFunction:
+    Type: AWS::Serverless::Function # More info about Function Resource:
+    Properties:
+      CodeUri: book-service/
+      Handler: app.getAll
+      Runtime: nodejs14.x
+      Events:
+        GetAllBooks:
+          Type: Api # More info about API Event Source:
+          Properties:
+            Path: /books
+            Method: get
+
+  GetBookFunction:
+    Type: AWS::Serverless::Function # More info about Function Resource:
+    Properties:
+      CodeUri: book-service/
+      Handler: app.get
+      Runtime: nodejs14.x
+      Events:
+        GetBook:
+          Type: Api # More info about API Event Source:
+          Properties:
+            Path: /books/{id}
+            Method: get
+
+  UpdateBookFunction:
+    Type: AWS::Serverless::Function # More info about Function Resource:
+    Properties:
+      CodeUri: book-service/
+      Handler: app.update
+      Runtime: nodejs14.x
+      Events:
+        UpdateBook:
+          Type: Api # More info about API Event Source:
+          Properties:
+            Path: /books/{id}
+            Method: PUT
+
+  DeleteBookFunction:
+    Type: AWS::Serverless::Function # More info about Function Resource:
+    Properties:
+      CodeUri: book-service/
+      Handler: app.delete
+      Runtime: nodejs14.x
+      Events:
+        DeleteBook:
+          Type: Api # More info about API Event Source:
+          Properties:
+            Path: /books/{id}
+            Method: DELETE                              
+
+Policies:
+  - DynamoDBCrudPolicy:
+      TableName: !Ref MyTable            
 
 Outputs:
   # ServerlessRestApi is an implicit API created out of Events key under Serverless::Function
