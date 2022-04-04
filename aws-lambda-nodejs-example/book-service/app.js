@@ -1,9 +1,11 @@
 const { DynamoDB } = require('aws-sdk');
+const uuidv4 = require("uuid/v4")
 const dynamoDb = new DynamoDB.DocumentClient();
 const tableName = process.env.TABLE_NAME;
 
 
 exports.create = async (event, context) => { 
+    const id = uuidv4();
     const { author, title, tag } = JSON.parse(event.body);
     const params = {
         TableName: tableName,

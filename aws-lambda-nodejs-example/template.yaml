@@ -11,7 +11,7 @@ Globals:
     Timeout: 3
     Environment:
       Variables:
-        TABLE_NAME: 'books-table'
+        TABLE_NAME: 'book-table'
 
 Resources:
   HelloWorldFunction:
@@ -49,6 +49,9 @@ Resources:
       CodeUri: book-service/
       Handler: app.create
       Runtime: nodejs14.x
+      Policies:
+        - DynamoDBCrudPolicy:
+            TableName: !Ref MyTable
       Events:
         CreateBook:
           Type: Api # More info about API Event Source:
@@ -62,6 +65,9 @@ Resources:
       CodeUri: book-service/
       Handler: app.getAll
       Runtime: nodejs14.x
+      Policies:
+        - DynamoDBCrudPolicy:
+            TableName: !Ref MyTable
       Events:
         GetAllBooks:
           Type: Api # More info about API Event Source:
@@ -75,6 +81,9 @@ Resources:
       CodeUri: book-service/
       Handler: app.get
       Runtime: nodejs14.x
+      Policies:
+        - DynamoDBCrudPolicy:
+            TableName: !Ref MyTable
       Events:
         GetBook:
           Type: Api # More info about API Event Source:
@@ -88,6 +97,9 @@ Resources:
       CodeUri: book-service/
       Handler: app.update
       Runtime: nodejs14.x
+      Policies:
+        - DynamoDBCrudPolicy:
+            TableName: !Ref MyTable
       Events:
         UpdateBook:
           Type: Api # More info about API Event Source:
@@ -101,6 +113,9 @@ Resources:
       CodeUri: book-service/
       Handler: app.delete
       Runtime: nodejs14.x
+      Policies:
+        - DynamoDBCrudPolicy:
+            TableName: !Ref MyTable
       Events:
         DeleteBook:
           Type: Api # More info about API Event Source:
@@ -108,9 +123,13 @@ Resources:
             Path: /books/{id}
             Method: DELETE                              
 
-Policies:
-  - DynamoDBCrudPolicy:
-      TableName: !Ref MyTable            
+  MyTable:
+    Type: AWS::Serverless::SimpleTable
+    Properties:
+      PrimaryKey:
+          Type: String
+          Name: id
+      TableName: book-table
 
 Outputs:
   # ServerlessRestApi is an implicit API created out of Events key under Serverless::Function
@@ -135,3 +154,4 @@ Outputs:
   QuotesScraperFunctionIamRole:
     Description: "Implicit IAM Role created for Quotes Scraper function"
     Value: !GetAtt QuotesScraperFunctionRole.Arn  
+   
