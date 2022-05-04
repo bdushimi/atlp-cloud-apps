@@ -1,5 +1,4 @@
 'use strict';
-// import { sendResponse } from './utils/sendResponse.mjs';
 const axios = require("axios").default;
 
 exports.generate = async (event) => {
