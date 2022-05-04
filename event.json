@@ -1,0 +1,11 @@
+{
+    "path": "/veriphone",
+    "httpMethod": "GET",
+    "headers": {
+        "Accept": "*/*",
+        "content-type": "application/json; charset=UTF-8"
+    },
+    "queryStringParameters": {
+        "phoneNumber": "250782769303"
+    }
+}
