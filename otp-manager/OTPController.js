@@ -32,22 +32,4 @@ exports.generate = async (event) => {
       sender_id
     }
   }
-
-  // axios.request(options).then(function (response) {
-
-  //   console.log("response",response)
-
-  //   return {
-  //     'statusCode': 200,
-  //     'body': response.data
-  //   }
-  // }).catch(function (error) {
-
-  // console.log("error",error)
-
-  //   return {
-  //     'statusCode': 500,
-  //     'error': error
-  //   }
-  // });
 }
