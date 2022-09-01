@@ -1,0 +1,142 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: 'aws-lambda-nodejs-example
+
+  Sample SAM Template for aws-lambda-nodejs-example
+
+  '
+Globals:
+  Function:
+    Timeout: 3
+    Environment:
+      Variables:
+        TABLE_NAME: book-table
+Resources:
+  HelloWorldFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: HelloWorldFunction
+      Handler: app.lambdaHandler
+      Runtime: nodejs14.x
+      AutoPublishAlias: live
+      Architectures:
+      - x86_64
+      Events:
+        HelloWorld:
+          Type: Api
+          Properties:
+            Path: /hello
+            Method: get
+    Metadata:
+      SamResourceId: HelloWorldFunction
+  QuotesScraperFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: QuotesScraperFunction
+      Handler: app.lambdaHandler
+      Runtime: nodejs14.x
+      Events:
+        QuotesScraper:
+          Type: Api
+          Properties:
+            Path: /quotes
+            Method: get
+    Metadata:
+      SamResourceId: QuotesScraperFunction
+  CreateBookFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: CreateBookFunction
+      Handler: app.create
+      Runtime: nodejs14.x
+      Policies:
+      - DynamoDBCrudPolicy:
+          TableName:
+            Ref: MyTable
+      Events:
+        CreateBook:
+          Type: Api
+          Properties:
+            Path: /book
+            Method: POST
+    Metadata:
+      SamResourceId: CreateBookFunction
+  GetAllBooksFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: GetAllBooksFunction
+      Handler: app.getAll
+      Runtime: nodejs14.x
+      Policies:
+      - DynamoDBCrudPolicy:
+          TableName:
+            Ref: MyTable
+      Events:
+        GetAllBooks:
+          Type: Api
+          Properties:
+            Path: /books
+            Method: get
+    Metadata:
+      SamResourceId: GetAllBooksFunction
+  GetBookFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: GetBookFunction
+      Handler: app.get
+      Runtime: nodejs14.x
+      Policies:
+      - DynamoDBCrudPolicy:
+          TableName:
+            Ref: MyTable
+      Events:
+        GetBook:
+          Type: Api
+          Properties:
+            Path: /books/{id}
+            Method: get
+    Metadata:
+      SamResourceId: GetBookFunction
+  UpdateBookFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: UpdateBookFunction
+      Handler: app.update
+      Runtime: nodejs14.x
+      Policies:
+      - DynamoDBCrudPolicy:
+          TableName:
+            Ref: MyTable
+      Events:
+        UpdateBook:
+          Type: Api
+          Properties:
+            Path: /books/{id}
+            Method: PUT
+    Metadata:
+      SamResourceId: UpdateBookFunction
+  DeleteBookFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: DeleteBookFunction
+      Handler: app.delete
+      Runtime: nodejs14.x
+      Policies:
+      - DynamoDBCrudPolicy:
+          TableName:
+            Ref: MyTable
+      Events:
+        DeleteBook:
+          Type: Api
+          Properties:
+            Path: /books/{id}
+            Method: DELETE
+    Metadata:
+      SamResourceId: DeleteBookFunction
+  MyTable:
+    Type: AWS::Serverless::SimpleTable
+    Properties:
+      PrimaryKey:
+        Type: String
+        Name: id
+      TableName: book-table
