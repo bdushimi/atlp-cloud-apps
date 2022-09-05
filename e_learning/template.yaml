@@ -91,7 +91,7 @@ Resources:
     Properties:
       Runtime: nodejs14.x
       CodeUri: server/
-      Handler: app.handlerMain
+      Handler: app.handler
       Timeout: 20
       Environment:
         Variables:
