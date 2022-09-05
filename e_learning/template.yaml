@@ -1,0 +1,161 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: >-
+  This application creates a Dynamic e-learning website that interacts with the backend service.
+
+# More info about Globals: https://github.com/awslabs/serverless-application-model/blob/master/docs/globals.rst
+# Globals:
+#   Function:
+#     Timeout: 3
+
+Parameters:
+  BucketName:
+    Type: String
+  DatabaseName:
+    Type: String
+
+Resources:
+  BasicAWSApiGateway:
+    Type: AWS::Serverless::Api
+    Properties:
+      Name: E-learning Basic AWS API Gateway
+      StageName: Prod
+      Cors:
+        AllowHeaders: "'*'"
+        AllowOrigin: "'*'"
+        AllowMethods: "'*'"
+
+  WebsiteBucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketName: !Ref BucketName
+      WebsiteConfiguration:
+        IndexDocument: index.html
+        ErrorDocument: index.html
+      CorsConfiguration:
+        CorsRules:
+        - AllowedHeaders:
+            - "*" 
+          AllowedMethods:
+            - "GET"
+            - "POST"
+            - "PUT"
+          AllowedOrigins:
+            - "*" 
+
+  WebSiteBucketPolicy:
+    Type: AWS::S3::BucketPolicy
+    Properties:
+      Bucket: !Ref WebsiteBucket
+      PolicyDocument:
+        Id: WebsiteBucketPolicy
+        Version: 2012-10-17
+        Statement:
+          - Sid: PublicReadAndPutForGetBucketObjects
+            Effect: Allow
+            Principal: '*'
+            Action:
+              - s3:GetObject
+              - s3:PutObject
+              - s3:PutObjectAcl
+            Resource: !Sub arn:aws:s3:::${WebsiteBucket}/*
+
+  myDB:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      TableName: !Ref DatabaseName
+      AttributeDefinitions:
+        - AttributeName: title
+          AttributeType: S
+      KeySchema:
+        - AttributeName: title
+          KeyType: HASH
+      ProvisionedThroughput:
+        ReadCapacityUnits: 5
+        WriteCapacityUnits: 5
+
+  ApiGatewayFrontend:
+    Type: AWS::Serverless::Api
+    Properties:
+      Name: AWS API Gateway
+      StageName: Prod
+      BinaryMediaTypes:
+        - "text/plain"
+      Cors:
+        AllowMethods: "'*'"
+        AllowHeaders: "'*'"
+        AllowOrigin: "'*'"
+
+  UploadFileFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      Runtime: nodejs14.x
+      CodeUri: server/
+      Handler: app.handlerMain
+      Timeout: 20
+      Environment:
+        Variables:
+          BUCKET_NAME: !Ref WebsiteBucket
+          API_ENDPOINT: !Sub https://${BasicAWSApiGateway}.execute-api.${AWS::Region}.amazonaws.com/Prod/
+      Events:
+        RestPost:
+          Type: Api
+          Properties:
+            RestApiId: !Ref ApiGatewayFrontend
+            Path: /upload
+            Method: POST
+        RestPut:
+          Type: Api
+          Properties:
+            RestApiId: !Ref ApiGatewayFrontend
+            Path: /upload
+            Method: PUT  
+
+  LambdaMain:
+    Type: AWS::Serverless::Function
+    Properties:
+      Runtime: nodejs14.x
+      CodeUri: server/
+      Handler: app.handlerMain
+      Policies:
+        - DynamoDBCrudPolicy:
+            TableName: !Ref myDB
+      Events:
+        InitialLambda:
+          Type: Api
+          Properties:
+            RestApiId: !Ref BasicAWSApiGateway
+            Path: /
+            Method: GET 
+        LoadLambda:
+          Type: Api
+          Properties:
+            RestApiId: !Ref BasicAWSApiGateway
+            Path: /loadAllCourses
+            Method: GET
+        FetchLambda:
+          Type: Api 
+          Properties:
+            RestApiId: !Ref BasicAWSApiGateway
+            Path: /fetchAllCourses
+            Method: GET 
+
+      Environment:
+        Variables:
+          DYNAMO_TABLE: !Ref myDB
+
+
+Outputs:
+  BasicAWSApiGateway:
+    Description: API Gateway endpoint URL for Staging stage for Backend API functions
+    Value: 
+      Fn::Sub: https://${BasicAWSApiGateway}.execute-api.${AWS::Region}.amazonaws.com/Prod/
+
+  ApiGatewayFrontendURL:
+    Description: API Gateway endpoint URL for Staging stage for S3 Bucket upload API functions
+    Value:
+      Fn::Sub: https://${ApiGatewayFrontend}.execute-api.${AWS::Region}.amazonaws.com/Prod/upload/
+
+  WebsiteURL:
+    Description: URL for website hosted on S3
+    Value: !GetAtt WebsiteBucket.WebsiteURL

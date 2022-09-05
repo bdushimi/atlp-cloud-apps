@@ -1,0 +1,29 @@
+{
+  "name": "server",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "nodemon app.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "aws-sdk": "^2.1135.0",
+    "cors": "^2.8.5",
+    "dotenv": "^16.0.0",
+    "dynamoose": "^2.8.5",
+    "express": "^4.17.3",
+    "lambda-multipart-parser": "^1.0.1",
+    "mongodb": "^4.5.0",
+    "mongoose": "^6.2.10",
+    "morgan": "^1.10.0",
+    "nodemon": "^2.0.15",
+    "react-bootstrap-icons": "^1.8.4",
+    "react-icons": "^4.4.0",
+    "react-rater": "^6.0.2",
+    "s3-lambo": "^1.1.1"
+  }
+}
